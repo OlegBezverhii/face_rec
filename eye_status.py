@@ -103,12 +103,12 @@ def train(train_generator, val_generator):
 def predict(img, model):
 	#img = Image.fromarray(img, 'RGB').convert('L')
 	img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	print(img)
+	#print(img)
 	img = cv2.resize(img, dsize=(IMG_SIZE,IMG_SIZE))
 	#img = resize(img, (IMG_SIZE,IMG_SIZE)).astype('float32')
 	#img = np.array(Image.fromarray(obj=img, mode='F').resize(size=(IMG_SIZE, IMG_SIZE), resample=Image.BICUBIC))
 	#img /= 255
-	print(img)
+	#print(img)
 	img = img.reshape(1,IMG_SIZE,IMG_SIZE,1)
 	prediction = model.predict(img)
 	if prediction < 0.1:
