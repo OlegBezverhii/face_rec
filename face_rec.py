@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
 import os
 import cv2
 import face_recognition
@@ -6,6 +12,10 @@ from tqdm import tqdm
 from collections import defaultdict
 from imutils.video import VideoStream
 from eye_status import * 
+
+
+# In[2]:
+
 
 def init():
     face_cascPath = 'haarcascade_frontalface_alt.xml'
@@ -23,6 +33,7 @@ def init():
 
     print("[LOG] Opening webcam ...")
     video_capture = VideoStream(src=0).start()
+    #video_capture = cv2.VideoCapture(0)
 
     model = load_model()
 
@@ -34,6 +45,10 @@ def init():
             if file.endswith("jpg"):
                 images.append(os.path.join(direc,file))
     return (model,face_detector, open_eyes_detector, left_eye_detector,right_eye_detector, video_capture, images) 
+
+
+# In[3]:
+
 
 def process_and_encode(images):
     # initialize the list of known encodings and known names
@@ -71,6 +86,10 @@ def isBlinking(history, maxFrames):
         if pattern in history:
             return True
     return False
+
+
+# In[4]:
+
 
 def detect_and_display(model, video_capture, face_detector, open_eyes_detector, left_eye_detector, right_eye_detector, data, eyes_detected):
         frame = video_capture.read()
@@ -190,6 +209,9 @@ def detect_and_display(model, video_capture, face_detector, open_eyes_detector, 
         return frame
 
 
+# In[5]:
+
+
 if __name__ == "__main__":
     (model, face_detector, open_eyes_detector,left_eye_detector,right_eye_detector, video_capture, images) = init()
     data = process_and_encode(images)
@@ -202,3 +224,10 @@ if __name__ == "__main__":
             break
     cv2.destroyAllWindows()
     video_capture.stop()
+
+
+# In[ ]:
+
+
+
+

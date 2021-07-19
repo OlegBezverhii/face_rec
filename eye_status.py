@@ -1,17 +1,18 @@
 import os
 from PIL import Image
 import numpy as np
+import cv2
 
-from keras.models import Sequential
-from keras.layers import Conv2D
-from keras.layers import AveragePooling2D
-from keras.layers import Flatten
-from keras.layers import Dense
-from keras.models import model_from_json
-from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.layers import AveragePooling2D
+from tensorflow.keras.layers import Flatten
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import model_from_json
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-from scipy.ndimage import imread
-from scipy.misc import imresize, imsave
+from imageio import imread, imwrite
+from skimage.transform import resize
 
 IMG_SIZE = 24
 
@@ -100,9 +101,14 @@ def train(train_generator, val_generator):
 	save_model(model)
 
 def predict(img, model):
-	img = Image.fromarray(img, 'RGB').convert('L')
-	img = imresize(img, (IMG_SIZE,IMG_SIZE)).astype('float32')
-	img /= 255
+	#img = Image.fromarray(img, 'RGB').convert('L')
+	img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	print(img)
+	img = cv2.resize(img, dsize=(IMG_SIZE,IMG_SIZE))
+	#img = resize(img, (IMG_SIZE,IMG_SIZE)).astype('float32')
+	#img = np.array(Image.fromarray(obj=img, mode='F').resize(size=(IMG_SIZE, IMG_SIZE), resample=Image.BICUBIC))
+	#img /= 255
+	print(img)
 	img = img.reshape(1,IMG_SIZE,IMG_SIZE,1)
 	prediction = model.predict(img)
 	if prediction < 0.1:
